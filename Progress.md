@@ -1,7 +1,7 @@
 # F1 Data Pipeline — Progress
 
 > The brain of this project. Read this first in every session.
-> Maintained by Claude: tasks are ticked `[x]` and **Current status** is updated as soon as a step is done.
+> Tasks are ticked `[x]` and **Where are we?** is updated as soon as a step is done.
 
 ---
 
