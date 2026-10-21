@@ -10,8 +10,8 @@
 | | |
 |---|---|
 | **Phase** | 2 — Extract → bronze |
-| 👉 **Now** | Function: fetch one page with a timeout and error handling |
-| ⏭️ **Next** | Check: `total <= limit`, otherwise raise an error |
+| 👉 **Now** | Check: `total <= limit`, otherwise raise an error |
+| ⏭️ **Next** | Skip the request if the file already exists (no re-downloads) |
 | 🕒 **Last updated** | 2026-10-21 |
 
 ### Overview
@@ -20,7 +20,7 @@
 |---|---|---|
 | 0 — Setup | ✅ Done | 9 / 9 |
 | 1 — Explore the API and define scope | 🟡 Almost done (README left) | 6 / 7 |
-| **2 — Extract → bronze** | 👉 **In progress** | **3 / 11** |
+| **2 — Extract → bronze** | 👉 **In progress** | **4 / 11** |
 | 3 — Load bronze → DuckDB | ⬜ Not started | 0 / 3 |
 | 4 — dbt: silver + gold | ⬜ Not started | 0 / 7 |
 | 5 — Dashboard | ⬜ Not started | 0 / 3 |
@@ -115,8 +115,8 @@ An end-to-end F1 data pipeline, built **local-first** (free) and optionally move
 - [x] Choose bronze folder names for the 3 endpoints
 - [x] Design the extractor in plain English (inputs, loop, checks, outputs)
 - [x] Function: build the URL for an endpoint + season (`build_url` in `extract/extract_bronze.py`)
-- [ ] 👉 **Function: fetch one page with a timeout and error handling** ← you are here
-- [ ] Check: `total <= limit`, otherwise raise an error
+- [x] Function: fetch one page with a timeout and error handling (`fetch_page`: returns the raw `Response`, no `try/except`)
+- [ ] 👉 **Check: `total <= limit`, otherwise raise an error** ← you are here
 - [ ] Skip the request if the file already exists (no re-downloads)
 - [ ] Pause between requests (rate limit)
 - [ ] Save the raw JSON response unchanged to `data/bronze/<endpoint>/<season>.json`
