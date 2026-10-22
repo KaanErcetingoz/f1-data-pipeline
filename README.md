@@ -75,13 +75,20 @@ f1-data-pipeline/
 │   └── gold/
 ├── dbt/            # dbt project: silver (staging) and gold (marts) models
 ├── dags/           # Airflow DAGs
-├── notebooks/      # Exploration and setup checks
-└── Progress.md     # Detailed roadmap and decision log
+└── notebooks/      # Exploration and setup checks
 ```
 
 ## Status
 
-🚧 **Phase 2 of 7: building the extractor (API → bronze).** See [Progress.md](Progress.md) for the full roadmap, design decisions and data findings.
+🚧 **Building the extractor (API → bronze).**
+
+- [x] Explore the API and define scope
+- [ ] Extract → bronze (Python)
+- [ ] Load bronze → DuckDB
+- [ ] dbt: silver + gold, with tests
+- [ ] Dashboard
+- [ ] Orchestration with Airflow
+- [ ] Optional: migrate to Google Cloud
 
 ## License
 
