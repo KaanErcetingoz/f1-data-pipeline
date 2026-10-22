@@ -25,6 +25,21 @@ def fetch_page(url: str) -> requests.Response:
     response.raise_for_status()
     return response
 
-# response = fetch_page(build_url("asdf", 2024)) wrong endpoint test
+def check_complete(response: requests.Response) -> None:
+    """Raise an error if the page does not contain every record."""
+    mr_data = response.json()["MRData"]
+    total = int(mr_data["total"])
+    limit = int(mr_data["limit"])
+    if total > limit:
+        raise ValueError(f"Incomplete data for {response.url}: total={total}, limit={limit}")
+
+
+# Happy path: total=24, limit=100 -> no error
 response = fetch_page(build_url("results/1", 2024))
-print(response.status_code, len(response.text))
+check_complete(response)
+print("OK:", response.url)
+
+# Failure path: force limit=10 -> must raise ValueError
+small_page = fetch_page(f"{BASE_URL}/2024/results/1.json?limit=10")
+check_complete(small_page)
+

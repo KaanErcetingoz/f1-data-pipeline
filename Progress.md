@@ -10,9 +10,9 @@
 | | |
 |---|---|
 | **Phase** | 2 — Extract → bronze |
-| 👉 **Now** | Check: `total <= limit`, otherwise raise an error |
-| ⏭️ **Next** | Skip the request if the file already exists (no re-downloads) |
-| 🕒 **Last updated** | 2026-10-21 |
+| 👉 **Now** | Skip the request if the file already exists (no re-downloads) |
+| ⏭️ **Next** | Pause between requests (rate limit) |
+| 🕒 **Last updated** | 2026-10-22 |
 
 ### Overview
 
@@ -20,7 +20,7 @@
 |---|---|---|
 | 0 — Setup | ✅ Done | 9 / 9 |
 | 1 — Explore the API and define scope | 🟡 Almost done (README left) | 6 / 7 |
-| **2 — Extract → bronze** | 👉 **In progress** | **4 / 11** |
+| **2 — Extract → bronze** | 👉 **In progress** | **5 / 11** |
 | 3 — Load bronze → DuckDB | ⬜ Not started | 0 / 3 |
 | 4 — dbt: silver + gold | ⬜ Not started | 0 / 7 |
 | 5 — Dashboard | ⬜ Not started | 0 / 3 |
@@ -57,6 +57,7 @@ An end-to-end F1 data pipeline, built **local-first** (free) and optionally move
 | Extractor flow | Outer loop: endpoint, inner loop: season. Per item: skip if file exists (no pause) → request with timeout → stop on HTTP error → stop if `total > limit` → mkdir + save raw response text → log → pause | Pause only after real requests; saving raw text keeps bronze truly unchanged |
 | Page size | Always `limit=100` | Fewest requests, stays well under rate limits |
 | Fail loudly | If `total > limit`, stop with an error | Never continue silently with incomplete data |
+| Completeness check uses the response's `limit` | Compare `MRData.total` with `MRData.limit`, not our `LIMIT` constant | The server may apply a lower limit than requested; the response tells what was really applied |
 | Japan | Filter by **country**, not circuit | Covers both Suzuka and Fuji (2007–2008) |
 | Points comparison | % of maximum possible points; pre-2010 points system shown separately, not compared directly | Points system changed in 2010; sprints added in 2021 |
 | Naming | `snake_case` for folders, files, columns | Consistent and readable |
@@ -116,8 +117,8 @@ An end-to-end F1 data pipeline, built **local-first** (free) and optionally move
 - [x] Design the extractor in plain English (inputs, loop, checks, outputs)
 - [x] Function: build the URL for an endpoint + season (`build_url` in `extract/extract_bronze.py`)
 - [x] Function: fetch one page with a timeout and error handling (`fetch_page`: returns the raw `Response`, no `try/except`)
-- [ ] 👉 **Check: `total <= limit`, otherwise raise an error** ← you are here
-- [ ] Skip the request if the file already exists (no re-downloads)
+- [x] Check: `total <= limit`, otherwise raise an error (`check_complete`, tested with a forced `limit=10`)
+- [ ] 👉 **Skip the request if the file already exists (no re-downloads)** ← you are here
 - [ ] Pause between requests (rate limit)
 - [ ] Save the raw JSON response unchanged to `data/bronze/<endpoint>/<season>.json`
 - [ ] Loop over seasons 2006–2025 and all 3 endpoints
