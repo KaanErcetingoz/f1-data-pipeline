@@ -19,7 +19,7 @@
 | Phase | | Progress |
 |---|---|---|
 | 0 — Setup | ✅ Done | 9 / 9 |
-| 1 — Explore the API and define scope | 🟡 Almost done (README left) | 6 / 7 |
+| 1 — Explore the API and define scope | ✅ Done | 7 / 7 |
 | **2 — Extract → bronze** | 👉 **In progress** | **5 / 11** |
 | 3 — Load bronze → DuckDB | ⬜ Not started | 0 / 3 |
 | 4 — dbt: silver + gold | ⬜ Not started | 0 / 7 |
@@ -103,13 +103,13 @@ An end-to-end F1 data pipeline, built **local-first** (free) and optionally move
 - [x] First commit and push
 - [x] `notebooks/00_setup_check.ipynb`: imports, versions, DuckDB test query
 
-### Phase 1 — Explore the API and define scope 🟡
+### Phase 1 — Explore the API and define scope ✅
 - [x] Read the driver standings JSON and understand its nesting
 - [x] Understand pagination (`total`, `limit`, `offset`) and the stop rule
 - [x] Define the questions the dashboard will answer
 - [x] Choose endpoints and year range
 - [x] Choose architecture (medallion) and bronze layout (Option A)
-- [ ] Document goal, questions, scope and decisions in `README.md` (English) and commit
+- [x] Document goal, questions, scope and decisions in `README.md` (English) and commit
 - [x] Rename `data/raw/` → `data/bronze/`
 
 ### Phase 2 — Extract → bronze (Python) 👉
