@@ -1,12 +1,14 @@
 """Extract raw JSON from the Jolpica-F1 API into the bronze layer."""
 
 from pathlib import Path
+import time
 
 import requests
 
 BASE_URL = "https://api.jolpi.ca/ergast/f1"
 LIMIT = 100
 TIMEOUT = 30  # seconds
+PAUSE = 0.4  # seconds between requests
 
 BRONZE_PATH = Path("data/bronze")
 
@@ -42,10 +44,19 @@ def check_complete(response: requests.Response) -> None:
     limit = int(mr_data["limit"])
     if total > limit:
         raise ValueError(
-            f"Incomplete data for {response.url}: total={total}, limit={limit}")
+            f"Incomplete data for {response.url}: total={total}, limit={limit}"
+        )
 
 
+def save_raw(response: requests.Response, path: Path) -> None:
+    """Write the reply body to disk exactly as the server sent it."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(response.content)
+
+
+reply = requests.get("https://api.jolpi.ca/ergast/f1/2024/results/1.json?limit=100", timeout=30)
 path = build_path("race_winners", 2024)
+save_raw(reply, path)
 print(path)
 print(path.exists())
 
