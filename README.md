@@ -57,12 +57,31 @@ Because bronze is immutable, silver and gold can always be rebuilt from scratch 
 | Area | Tool | Status |
 |---|---|---|
 | Language & environment | Python 3.12, [uv](https://github.com/astral-sh/uv) | ✅ |
-| Extraction | `requests` | 🚧 In progress |
+| Extraction | `requests` | ✅ |
 | Storage & query engine | DuckDB | Planned |
 | Transformation & tests | dbt (`dbt-duckdb`) | Planned |
 | Dashboard | Streamlit or Evidence | Planned |
 | Orchestration | Apache Airflow (Docker) | Planned |
 | Cloud (optional) | GCS, BigQuery, Looker Studio | Planned |
+
+## How to run
+
+Requires [uv](https://github.com/astral-sh/uv).
+
+```bash
+git clone https://github.com/KaanErcetingoz/f1-data-pipeline.git
+cd f1-data-pipeline
+uv sync
+uv run python extract/extract_bronze.py
+```
+
+The extractor downloads 60 files (3 endpoints × 20 seasons) into `data/bronze/` in about 30 seconds. Running it again skips every file that already exists and makes no API calls:
+
+```
+downloaded  data/bronze/driver_standings/2006.json
+...
+skipped     data/bronze/race_winners/2025.json
+```
 
 ## Project structure
 
@@ -80,10 +99,10 @@ f1-data-pipeline/
 
 ## Status
 
-🚧 **Building the extractor (API → bronze).**
+🚧 **Loading bronze into DuckDB.**
 
 - [x] Explore the API and define scope
-- [ ] Extract → bronze (Python)
+- [x] Extract → bronze (Python): 60 raw JSON files, idempotent re-runs
 - [ ] Load bronze → DuckDB
 - [ ] dbt: silver + gold, with tests
 - [ ] Dashboard

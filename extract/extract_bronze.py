@@ -9,6 +9,7 @@ BASE_URL = "https://api.jolpi.ca/ergast/f1"
 LIMIT = 100
 TIMEOUT = 30  # seconds
 PAUSE = 0.4  # seconds between requests
+SEASONS = range(2006, 2026)  # 2006-2025
 
 BRONZE_PATH = Path("data/bronze")
 
@@ -49,16 +50,27 @@ def check_complete(response: requests.Response) -> None:
 
 
 def save_raw(response: requests.Response, path: Path) -> None:
-    """Write the reply body to disk exactly as the server sent it."""
+    """Write the response body to disk exactly as the server sent it."""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(response.content)
 
 
-reply = requests.get("https://api.jolpi.ca/ergast/f1/2024/results/1.json?limit=100", timeout=30)
-path = build_path("race_winners", 2024)
-save_raw(reply, path)
-print(path)
-print(path.exists())
+def main() -> None:
+    """Download every endpoint for every season, skipping files that already exist."""
+    for folder, endpoint_path in ENDPOINTS.items():
+        for season in SEASONS:
+            path = build_path(folder, season)
+            if path.exists():
+                print(f"skipped {path}")
+                continue
+
+            response = fetch_page(build_url(endpoint_path, season))
+            check_complete(response)
+            save_raw(response, path)
+            print(f"downloaded {path}")
+            time.sleep(PAUSE)
 
 
-
+if __name__ == "__main__":
+    main()
+    
