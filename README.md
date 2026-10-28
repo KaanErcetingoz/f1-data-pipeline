@@ -88,6 +88,7 @@ skipped     data/bronze/race_winners/2025.json
 ```
 f1-data-pipeline/
 ├── extract/        # Python extractor: Jolpica API → bronze JSON files
+├── load/           # Python loader: bronze JSON files → DuckDB raw schema
 ├── data/           # Local data, not committed
 │   ├── bronze/     #   raw API responses
 │   ├── silver/
