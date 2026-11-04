@@ -1,16 +1,14 @@
 
-# Name your project! Project names should contain only lowercase characters
-# and underscores. A good package name should reflect your organization's
-# name or the intended use of these models
+# Set the project name using lowercase characters and underscores.
+# Choose a name that reflects your organization or the purpose of these models.
 name: 'f1'
 version: '1.0.0'
 
-# This setting configures which "profile" dbt uses for this project.
+# Configure the dbt profile used by this project.
 profile: 'f1'
 
-# These configurations specify where dbt should look for different types of files.
-# The `model-paths` config, for example, states that models in this project can be
-# found in the "models/" directory. You probably won't need to change these!
+# Specify where dbt should find each type of project file.
+# For example, `model-paths` points to the directory containing the models.
 model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
@@ -18,17 +16,19 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
-clean-targets:         # directories to be removed by `dbt clean`
+clean-targets:         # Directories removed by `dbt clean`.
   - "target"
   - "dbt_packages"
 
 
-# Configuring models
-# Full documentation: https://docs.getdbt.com/docs/configuring-models
+# Configure models.
+# See https://docs.getdbt.com/docs/configuring-models for details.
 
-# In this example config, we tell dbt to build all models in the example/
-# directory as views. These settings can be overridden in the individual model
-# files using the `{{ config(...) }}` macro.
+# Build models in the `staging` directory as views in the `silver` schema.
+# Individual model files can override these settings with the `{{ config(...) }}` macro.
 models:
   f1:
+    staging:
+      +materialized: view
+      +schema: silver
     
